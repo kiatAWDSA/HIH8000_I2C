@@ -5,7 +5,7 @@
   
   To adjust the internal settings of the
   sensor such as its I2C address and alarms, use the HIH8000CommandI2C library instead:
-  https://github.com/kiatAWDSA/HIH8000CommandI2C
+  https://github.com/kiatAWDSA/HIH8000Command_I2C
   
   Please note that the pins used for I2C communication are different for each
   Arduino board. For Arduino Uno, the SDA and SCL pins are A4 and A5, respectively.
@@ -49,15 +49,15 @@ class HIH8000_I2C  {
   
   private:
     // This is used when fetching data. The documentation says 4 bytes will be transmitted from the sensor.
-    const uint8_t dataBytes_ = 4;
+    const uint8_t dataBytes_    = 4;
   
-    bool addressSet_;
-    uint8_t address_;
-    uint8_t status_;
-    uint16_t humidityBuffer_;
-    uint16_t temperatureBuffer_;
-    float humidity_;
-    float temperature_;
+    bool addressSet_            = 0;
+    uint8_t address_            = 0;
+    uint8_t status_             = 0;
+    uint16_t humidityBuffer_    = 0;
+    uint16_t temperatureBuffer_ = 0;
+    float humidity_             = 0;
+    float temperature_          = 0;
 };
 
 #endif  // HIH8000_I2C_H

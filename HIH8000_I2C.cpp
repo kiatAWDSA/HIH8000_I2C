@@ -5,7 +5,7 @@
   
   To adjust the internal settings of the
   sensor such as its I2C address and alarms, use the HIH8000CommandI2C library instead:
-  https://github.com/kiatAWDSA/HIH8000CommandI2C
+  https://github.com/kiatAWDSA/HIH8000Command_I2C
   
   Please note that the pins used for I2C communication are different for each
   Arduino board. For Arduino Uno, the SDA and SCL pins are A4 and A5, respectively.
@@ -33,10 +33,13 @@
 // Instantiate with device address.
 HIH8000_I2C::HIH8000_I2C(uint8_t address) {
   address_ = address;
+  addressSet_ = true;
 }
 
 // If user prefers to instantiate class first and set the address later.
-HIH8000_I2C::HIH8000_I2C() {}
+HIH8000_I2C::HIH8000_I2C() {
+  addressSet_ = false;
+}
 
 // No specific destruction subroutines necessary (ending Wire here might affect other devices on I2C line).
 HIH8000_I2C::~HIH8000_I2C() {}
@@ -44,38 +47,43 @@ HIH8000_I2C::~HIH8000_I2C() {}
 // Set/change I2C address of the sensor
 void HIH8000_I2C::setAddress(uint8_t address) {
   address_ = address;
+  addressSet_ = true;
 }
 
 // To initiate a measurement, need to send a write request to the sensor without any data. This is equivalent to initiating a transmission in the Wire libary.
 // NOTE: It typically takes 36.65 ms for a reading to be generated.
 void HIH8000_I2C::triggerMeasurement() {
-  Wire.beginTransmission(address_);
-  Wire.endTransmission();
+  if (addressSet_) {
+    Wire.beginTransmission(address_);
+    Wire.endTransmission();
+  }
 }
 
 // Get the data stored in the sensor's registers and process them. These data is from the most recent triggered measurement.
 void HIH8000_I2C::fetchMeasurement(){
-  Wire.requestFrom(address_, dataBytes_);
-  
-  // Get raw humidity data
-  humidityBuffer_ = Wire.read();
-  humidityBuffer_ <<= 8;
-  humidityBuffer_ |= Wire.read();
+  if (addressSet_) {
+    Wire.requestFrom(address_, dataBytes_);
+    
+    // Get raw humidity data
+    humidityBuffer_ = Wire.read();
+    humidityBuffer_ <<= 8;
+    humidityBuffer_ |= Wire.read();
 
-  // Get raw temperature data
-  temperatureBuffer_ = Wire.read();
-  temperatureBuffer_ <<= 8;
-  temperatureBuffer_ |= Wire.read();
-  temperatureBuffer_ >>= 2;  // Remove the last two "Do Not Care" bits
+    // Get raw temperature data
+    temperatureBuffer_ = Wire.read();
+    temperatureBuffer_ <<= 8;
+    temperatureBuffer_ |= Wire.read();
+    temperatureBuffer_ >>= 2;  // Remove the last two "Do Not Care" bits
 
-  // Extract out status bits and clean raw humidity data
-  status_ = 0xC000 & humidityBuffer_;         // The integer constant is 1100000000000000 in binary
-  status_ >>= 14;                             // Push it to become 2 digits
-  humidityBuffer_ = 0x3FFF & humidityBuffer_; // The integer constant is 0011111111111111 in binary
-  
-  // Process the raw values. 16382 is 2^14 - 2.
-  humidity_ = humidityBuffer_/16382.0 * 100;
-  temperature_ = temperatureBuffer_/16382.0 * 165 - 40;
+    // Extract out status bits and clean raw humidity data
+    status_ = 0xC000 & humidityBuffer_;         // The integer constant is 1100000000000000 in binary
+    status_ >>= 14;                             // Push it to become 2 digits
+    humidityBuffer_ = 0x3FFF & humidityBuffer_; // The integer constant is 0011111111111111 in binary
+    
+    // Process the raw values. 16382 is 2^14 - 2.
+    humidity_ = humidityBuffer_/16382.0 * 100;
+    temperature_ = temperatureBuffer_/16382.0 * 165 - 40;
+  }
 }
 
 // Get the address set for the sensor.
