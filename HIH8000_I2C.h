@@ -39,7 +39,7 @@ class HIH8000_I2C  {
     HIH8000_I2C(uint8_t address);
     HIH8000_I2C();
     ~HIH8000_I2C();
-    void setAddress(uint8_t address);
+    void setAddress(uint8_t newAddress);
     void triggerMeasurement();
     void fetchMeasurement();
     uint8_t getStatus();

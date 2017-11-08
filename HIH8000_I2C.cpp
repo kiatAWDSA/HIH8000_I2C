@@ -32,8 +32,7 @@
 
 // Instantiate with device address.
 HIH8000_I2C::HIH8000_I2C(uint8_t address) {
-  address_ = address;
-  addressSet_ = true;
+  setAddress(uint8_t address)
 }
 
 // If user prefers to instantiate class first and set the address later.
@@ -45,9 +44,12 @@ HIH8000_I2C::HIH8000_I2C() {
 HIH8000_I2C::~HIH8000_I2C() {}
 
 // Set/change I2C address of the sensor
-void HIH8000_I2C::setAddress(uint8_t address) {
-  address_ = address;
-  addressSet_ = true;
+// Address MUST be 7-bits (max value is 0x7F i.e. 127)
+void HIH8000_I2C::setAddress(uint8_t newAddress) {
+  if (newAddress <= 0x7F) {
+    address_ = newAddress;
+    addressSet_ = true;
+  }
 }
 
 // To initiate a measurement, need to send a write request to the sensor without any data. This is equivalent to initiating a transmission in the Wire libary.
