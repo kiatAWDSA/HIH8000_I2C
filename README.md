@@ -2,16 +2,15 @@
 Obtain measurements from a Honeywell HIH8000 Series sensor connected to an Arduino board using I2C protocol (NOT SPI):
 https://sensing.honeywell.com/sensors/humidity-sensors/HIH8000-series
 
-This library applies mainly to the 4-pin through-hole variants of the Honeywell HIH8000 family of sensors, which utilize the I2C protocol. I have not tested this library for the surface-mount variants (some of which uses the SPI protocol).
+To adjust the internal settings of the sensor such as its I2C address and alarms, use the HIH8000CommandI2C library instead:
+https://github.com/kiatAWDSA/HIH8000Command_I2C
+
+NOTE: This library applies mainly to the 4-pin through-hole variants of the Honeywell HIH8000 family of sensors, which utilize the I2C protocol. I have not tested this library for the surface-mount variants (some of which uses the SPI protocol).
 
 Useful documents (the third document is especially useful if you want to modify the library):
 - Datasheet: https://sensing.honeywell.com/hih8000-datasheet-009075-7-en.pdf
 - Installation instructions: https://sensing.honeywell.com/humidicon-sip-4-pin-versions-install-50085524-en-rev-b-final-30may13.pdf
 - I2C communication with the sensor: https://sensing.honeywell.com/i2c-comms-humidicon-tn-009061-2-en-final-07jun12.pdf
-
-To adjust the internal settings of the
-sensor such as its I2C address and alarms, use the HIH8000CommandI2C library instead:
-https://github.com/kiatAWDSA/HIH8000Command_I2C
 
 # Instructions for use with Arduino boards
 For an example, see the examples folder.
