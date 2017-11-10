@@ -49,7 +49,7 @@ class HIH8000_I2C {
   
   private:
     // This is used when fetching data. The documentation says 4 bytes will be transmitted from the sensor.
-    const uint8_t dataBytes_    = 4;
+    static const uint8_t dataBytes_    = 4;
   
     bool addressSet_            = 0;
     uint8_t address_            = 0;
