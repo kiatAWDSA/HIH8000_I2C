@@ -34,7 +34,7 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-class HIH8000_I2C  {
+class HIH8000_I2C {
   public:
     HIH8000_I2C(uint8_t address);
     HIH8000_I2C();
