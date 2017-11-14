@@ -34,14 +34,28 @@
 #include "Arduino.h"
 #include "Wire.h"
 
+
+// Error codes
+typedef enum
+{
+  HIH8000_I2C_comStatus_OK            = 0b0000,  // No problemo
+  HIH8000_I2C_comStatus_LONGDATA      = 0b0001,  // endTransmission: data too long to fit in transmit buffer
+  HIH8000_I2C_comStatus_NACKADD       = 0b0010,  // endTransmission: received NACK on transmit of address
+  HIH8000_I2C_comStatus_NACKDATA      = 0b0011,  // endTransmission: received NACK on transmit of data
+  HIH8000_I2C_comStatus_OTHER         = 0b0100,  // endTransmission: other error
+  HIH8000_I2C_comStatus_BYTECOUNT     = 0b0101,  // requestFrom: returned different amount of bytes than requested
+  HIH8000_I2C_comStatus_ADDRESS       = 0b0110  // The address of the sensor hasn't been provided to the class instance
+} HIH8000_I2C_comStatus;
+
+
 class HIH8000_I2C {
   public:
     HIH8000_I2C(uint8_t address);
     HIH8000_I2C();
     ~HIH8000_I2C();
     void setAddress(uint8_t newAddress);
-    void triggerMeasurement();
-    void fetchMeasurement();
+    HIH8000_I2C_comStatus triggerMeasurement();
+    HIH8000_I2C_comStatus fetchMeasurement();
     uint8_t getStatus();
     uint8_t getAddress();
     float getHumidity();
@@ -49,11 +63,12 @@ class HIH8000_I2C {
   
   private:
     // This is used when fetching data. The documentation says 4 bytes will be transmitted from the sensor.
-    static const uint8_t dataBytes_    = 4;
+    static const uint8_t dataByteCount_    = 4;
   
     bool addressSet_            = 0;
     uint8_t address_            = 0;
     uint8_t status_             = 0;
+    uint8_t endTransErr_        = 0;
     uint16_t humidityBuffer_    = 0;
     uint16_t temperatureBuffer_ = 0;
     float humidity_             = 0;
