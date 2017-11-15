@@ -38,13 +38,21 @@
 // Error codes
 typedef enum
 {
-  HIH8000_I2C_comStatus_OK            = 0b0000,  // No problemo
-  HIH8000_I2C_comStatus_LONGDATA      = 0b0001,  // endTransmission: data too long to fit in transmit buffer
-  HIH8000_I2C_comStatus_NACKADD       = 0b0010,  // endTransmission: received NACK on transmit of address
-  HIH8000_I2C_comStatus_NACKDATA      = 0b0011,  // endTransmission: received NACK on transmit of data
-  HIH8000_I2C_comStatus_OTHER         = 0b0100,  // endTransmission: other error
-  HIH8000_I2C_comStatus_BYTECOUNT     = 0b0101,  // requestFrom: returned different amount of bytes than requested
-  HIH8000_I2C_comStatus_ADDRESS       = 0b0110  // The address of the sensor hasn't been provided to the class instance
+  // Errors categorized according to the functions that return them. Commented-out errors are still returned
+  // by that function, but is already defined in the list.
+  
+  // Errors returned from triggerMeasurement()
+  HIH8000_I2C_comStatus_OK            = 0b0000,   // No problemo
+  HIH8000_I2C_comStatus_LONGDATA      = 0b0001,   // endTransmission: data too long to fit in transmit buffer
+  HIH8000_I2C_comStatus_NACKADD       = 0b0010,   // endTransmission: received NACK on transmit of address
+  HIH8000_I2C_comStatus_NACKDATA      = 0b0011,   // endTransmission: received NACK on transmit of data
+  HIH8000_I2C_comStatus_OTHER         = 0b0100,   // endTransmission: other error
+  HIH8000_I2C_comStatus_ADDRESS       = 0b0101,   // The address of the sensor hasn't been provided to the class instance
+  
+  // Errors returned from fetchMeasurement()
+//HIH8000_I2C_comStatus_OK            = 0b0000,
+//HIH8000_I2C_comStatus_ADDRESS       = 0b0110,  
+  HIH8000_I2C_comStatus_BYTECOUNT     = 0b0110    // requestFrom: returned different amount of bytes than requested
 } HIH8000_I2C_comStatus;
 
 
